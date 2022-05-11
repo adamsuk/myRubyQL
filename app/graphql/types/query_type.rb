@@ -20,6 +20,7 @@ module Types
           end
       
     field :test_field, resolver: Resolvers::TestField
+    field :strava_athlete, resolver: Resolvers::StravaAthlete
     field :podcasts, resolver: Resolvers::Podcasts if ENV['PODCAST_URL']
     field :currency_rates, resolver: Resolvers::CurrencyRates if ENV['CURRENCY_API_KEY']
 

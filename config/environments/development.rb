@@ -67,4 +67,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  # May need updating depending on the public URL gitpod provides
+  config.hosts << /3000-adamsuk-myrubyql(-[a-zA-Z0-9]+)\.(([a-zA-Z]+)(-[a-zA-Z0-9]+)+)\.gitpod\.io/
 end

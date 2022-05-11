@@ -16,6 +16,7 @@ class PodcastClient
 
     def random_podcast
       res = safe_call("random-podcast")
+      puts res
       extract_podcast(res)
     end
 
