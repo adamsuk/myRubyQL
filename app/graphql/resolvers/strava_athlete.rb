@@ -3,8 +3,12 @@ module Resolvers
     type [Types::StravaAthleteType], null: true
     description 'Strava Athlete'
 
-    def resolve
-      [StravaClient.athlete]
+    argument :type, String, required: false
+
+    def resolve(type: 'athlete')
+      if type == 'athlete'
+        [StravaClient.athlete]
+      end
     end
   end
 end

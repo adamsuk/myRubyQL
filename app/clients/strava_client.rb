@@ -2,6 +2,10 @@ class StravaClient
   include HTTParty
 
   class << self
+
+    @@refresh_token = ENV['STRAVA_REFRESH_TOKEN']
+    @@access_token = ENV['STRAVA_ACCESS_TOKEN']
+
     def safe_call(endpoint, body: {})
       if !body.empty?
         combined_options = options.merge(:body => body.to_json)
@@ -14,20 +18,25 @@ class StravaClient
       {}
     end
 
-    def athlete
-      res = safe_call("athlete")
-      puts res
-      res ? res : {}
+    def token
+      body = {
+        "client_id": ENV['STRAVA_CLIENT_ID'],
+        "client_secret": ENV['STRAVA_CLIENT_SECRET'],
+        "grant_type": "refresh_token",
+        "refresh_token": @@refresh_token
+      }
+      res = safe_call("oauth/token", body: body)
+      res ? res.parsed_response : {}
+      if res
+        @@access_token = res['access_token']
+        @@refresh_token = res['refresh_token']
+      end
     end
 
-    def custom_podcast(rss_url, filters = {})
-      body = { "feed_url": rss_url }
-      if !filters.empty?
-        body = body.merge("podcast_filter": filters)
-      end
-      res = safe_call("podcasts", body: body)
-      puts res
-      res ? res : {}
+    def athlete
+      self.token()
+      res = safe_call("athlete")
+      res ? res.parsed_response : {}
     end
 
     def options
@@ -36,7 +45,7 @@ class StravaClient
         format: :json,
         headers: {
           'Content-Type' => 'application/json',
-          'Authorization' => 'Bearer 4655390b65a9716cd018e3899379f0d41243acb2'
+          'Authorization' => "Bearer #{@@access_token}"
         }
       }
     end

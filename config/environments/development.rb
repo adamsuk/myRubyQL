@@ -69,5 +69,5 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   # May need updating depending on the public URL gitpod provides
-  config.hosts << "3000-adamsuk-myrubyql-vxnhjoaathc.ws-eu44.gitpod.io"
+  config.hosts << /3000-adamsuk-myrubyql(-[a-zA-Z0-9]+)\.(([a-zA-Z]+)(-[a-zA-Z0-9]+)+)\.gitpod\.io/
 end
