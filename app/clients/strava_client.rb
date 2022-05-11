@@ -1,4 +1,4 @@
-class PodcastClient
+class StravaClient
   include HTTParty
 
   class << self
@@ -10,19 +10,14 @@ class PodcastClient
         response = get("/#{endpoint}", options)
       end
     rescue => e
-      Rails.logger.error("Fetching random podcast failed: #{e}")
+      Rails.logger.error("Fetching Strava data failed: #{e}")
       {}
     end
 
-    def random_podcast
-      res = safe_call("random-podcast")
+    def athlete
+      res = safe_call("athlete")
       puts res
-      extract_podcast(res)
-    end
-
-    def all_podcasts
-      res = safe_call("all-podcasts")
-      extract_podcast(res)
+      res ? res : {}
     end
 
     def custom_podcast(rss_url, filters = {})
@@ -31,20 +26,19 @@ class PodcastClient
         body = body.merge("podcast_filter": filters)
       end
       res = safe_call("podcasts", body: body)
-      extract_podcast(res)
+      puts res
+      res ? res : {}
     end
 
     def options
       {
-        base_uri: ENV['PODCAST_URL'],
+        base_uri: 'https://www.strava.com/api/v3',
         format: :json,
-        headers: { 'Content-Type' => 'application/json' }
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => 'Bearer 4655390b65a9716cd018e3899379f0d41243acb2'
+        }
       }
-    end
-
-    private 
-    def extract_podcast(res)
-      res ? res.parsed_response : {}
     end
   end
 
